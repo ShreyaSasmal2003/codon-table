@@ -64,12 +64,23 @@ def split_into_codons(seq):
 
 
 def translate_sequence(codon_list):
-    # Translate each codon into its corresponding amino acid.
     aa_chain = []
+    found_starts = []
+    found_stops = []
+    
+    stop_codons = ["TAA", "TAG", "TGA"]
+    
     for c in codon_list:
         amino_acid = codon_map.get(c, "Unknown")
         aa_chain.append(amino_acid)
-    return aa_chain
+        
+        # Track start and stop codons
+        if c == "ATG":
+            found_starts.append(c)
+        elif c in stop_codons:
+            found_stops.append(c)
+            
+    return aa_chain, found_starts, found_stops
 
 
 # Main program execution.
@@ -90,6 +101,8 @@ if __name__ == "__main__":
         if not codons:
             print(f"Sequence too short to form a 3-base codon (leftover: {extra_bases}).")
         else:
-            translated_aa = translate_sequence(codons)
+            translated_aa, starts, stops = translate_sequence(codons)
             print("Codons:", codons)
             print("Amino acids:", translated_aa)
+            print("Start codons:", starts)
+            print("Stop codons:", stops)
