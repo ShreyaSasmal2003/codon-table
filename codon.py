@@ -39,11 +39,17 @@ def show_full_table():
 
 
 def check_valid_seq(seq):
-    # Check if sequence only has valid DNA letters.
-    allowed_bases = set("ATGC")
+    # Check if sequence only has valid DNA.
+    allowed_bases = set("ATGCU")
     for base in seq:
         if base not in allowed_bases:
             return False
+    
+    
+    if "T" in seq and "U" in seq:
+        print("Error: Sequence mixes both T (DNA) and U (RNA) bases.")
+        return False
+        
     return True
 
 
@@ -63,7 +69,7 @@ def split_into_codons(seq):
     return codon_list, leftover
 
 
-def translate_sequence(codon_list):
+def translate_sequence(codon_list, is_rna=False):
     aa_chain = []
     found_starts = []
     found_stops = []
@@ -71,13 +77,15 @@ def translate_sequence(codon_list):
     stop_codons = ["TAA", "TAG", "TGA"]
     
     for c in codon_list:
-        amino_acid = codon_map.get(c, "Unknown")
+        # Look up the codon in our dictionary.
+        lookup_key = c.replace("U", "T") if is_rna else c
+        amino_acid = codon_map.get(lookup_key, "Unknown")
         aa_chain.append(amino_acid)
         
-        # Track start and stop codons.
-        if c == "ATG":
+        # Track start and stop codons
+        if lookup_key == "ATG":
             found_starts.append(c)
-        elif c in stop_codons:
+        elif lookup_key in stop_codons:
             found_stops.append(c)
             
     return aa_chain, found_starts, found_stops
@@ -100,7 +108,7 @@ def print_results(codon_list, aa_chain, found_starts, found_stops, leftover):
     print("-" * 50)
     for idx, (c, aa) in enumerate(zip(codon_list, aa_chain), start=1):
         role = "Coding"
-        if c == "ATG":
+        if c in ["ATG", "AUG"]:
             role = "Start Codon"
         elif aa == "Stop":
             role = "Stop Codon"
@@ -114,16 +122,24 @@ if __name__ == "__main__":
         show_full_table()
         
     # Get sequence from user.
-    user_seq = input("\nEnter a DNA sequence: ").strip().upper()
+    user_seq = input("\nEnter a DNA or RNA sequence: ").strip().upper()
     
     if not user_seq:
         print("Empty input! Please enter a valid nucleotide sequence.")
     elif not check_valid_seq(user_seq):
-        print("Invalid sequence! Please use only A, T, G, and C.")
+        print("Invalid sequence! Please use only A, T, G, C (for DNA) or A, U, G, C (for RNA).")
     else:
+        is_rna_seq = "U" in user_seq
+        if is_rna_seq:
+            print("Detected RNA sequence (contains Uracil).")
+        else:
+            print("Detected DNA sequence.")
+            
+        # Process and display results.
         codons, extra_bases = split_into_codons(user_seq)
+        
         if not codons:
             print(f"Sequence too short to form a 3-base codon (leftover: {extra_bases}).")
         else:
-            translated_aa, starts, stops = translate_sequence(codons)
+            translated_aa, starts, stops = translate_sequence(codons, is_rna=is_rna_seq)
             print_results(codons, translated_aa, starts, stops, extra_bases)
