@@ -1,4 +1,4 @@
-#Dictionary with DNA codons mapped to full amino acid names.
+#Dictionary with all DNA codons mapped to full amino acid names.
 codon_map = {
     # T-block (U-block in RNA)
     "TTT": "Phenylalanine", "TTC": "Phenylalanine", "TTA": "Leucine", "TTG": "Leucine",
@@ -47,6 +47,15 @@ def check_valid_seq(seq):
     return True
 
 
+def split_into_codons(seq):
+    # Slice the sequence into groups of 3 nucleotides
+    codon_list = []
+    for i in range(0, len(seq), 3):
+        chunk = seq[i:i+3]
+        codon_list.append(chunk)
+    return codon_list
+
+
 # Main program execution
 if __name__ == "__main__":
     ask_table = input("Do you want to view the full 64-codon table first? (y/n): ").strip().lower()
@@ -61,4 +70,5 @@ if __name__ == "__main__":
     elif not check_valid_seq(user_seq):
         print("Invalid sequence! Please use only A, T, G, and C.")
     else:
-        print("Valid DNA sequence received:", user_seq)
+        codons = split_into_codons(user_seq)
+        print("Split codons:", codons)
