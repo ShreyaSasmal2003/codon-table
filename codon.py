@@ -1,4 +1,4 @@
-#Dictionary with DNA codons mapped to full amino acid names.
+# Dictionary with DNA codons mapped to full amino acid names.
 codon_map = {
     # T-block (U-block in RNA)
     "TTT": "Phenylalanine", "TTC": "Phenylalanine", "TTA": "Leucine", "TTG": "Leucine",
@@ -74,13 +74,37 @@ def translate_sequence(codon_list):
         amino_acid = codon_map.get(c, "Unknown")
         aa_chain.append(amino_acid)
         
-        # Track start and stop codons
+        # Track start and stop codons.
         if c == "ATG":
             found_starts.append(c)
         elif c in stop_codons:
             found_stops.append(c)
             
     return aa_chain, found_starts, found_stops
+
+
+def print_results(codon_list, aa_chain, found_starts, found_stops, leftover):
+    
+    print("\n--- Translation Summary ---")
+    print(f"Codons: {'-'.join(codon_list)}")
+    print(f"Amino acids: {' - '.join(aa_chain)}")
+    print(f"Start codon: {', '.join(found_starts) if found_starts else 'None'}")
+    print(f"Stop codon: {', '.join(found_stops) if found_stops else 'None'}")
+    
+    if leftover:
+        print(f"\nNote: Ignored incomplete codon at the end: '{leftover}'")
+        
+    
+    print("\n--- Detailed Breakdown Table ---")
+    print(f"{'Pos':<6} | {'Codon':<8} | {'Amino Acid':<18} | {'Role'}")
+    print("-" * 50)
+    for idx, (c, aa) in enumerate(zip(codon_list, aa_chain), start=1):
+        role = "Coding"
+        if c == "ATG":
+            role = "Start Codon"
+        elif aa == "Stop":
+            role = "Stop Codon"
+        print(f"{idx:<6} | {c:<8} | {aa:<18} | {role}")
 
 
 # Main program execution.
@@ -102,7 +126,4 @@ if __name__ == "__main__":
             print(f"Sequence too short to form a 3-base codon (leftover: {extra_bases}).")
         else:
             translated_aa, starts, stops = translate_sequence(codons)
-            print("Codons:", codons)
-            print("Amino acids:", translated_aa)
-            print("Start codons:", starts)
-            print("Stop codons:", stops)
+            print_results(codons, translated_aa, starts, stops, extra_bases)
