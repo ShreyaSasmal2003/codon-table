@@ -1,4 +1,4 @@
-# Dictionary with DNA codons mapped to full amino acid names
+#Dictionary with DNA codons mapped to full amino acid names
 codon_map = {
     # T-block (U-block in RNA)
     "TTT": "Phenylalanine", "TTC": "Phenylalanine", "TTA": "Leucine", "TTG": "Leucine",
@@ -24,3 +24,15 @@ codon_map = {
     "GAT": "Aspartic acid", "GAC": "Aspartic acid", "GAA": "Glutamic acid", "GAG": "Glutamic acid",
     "GGT": "Glycine", "GGC": "Glycine", "GGA": "Glycine", "GGG": "Glycine"
 }
+
+
+def show_full_table():
+    # Helper function to print the codon lookup table.
+    print("\n--- Standard Genetic Code (64 Codons) ---")
+    count = 0
+    for codon, amino in codon_map.items():
+        print(f"{codon}: {amino:<15}", end=" | ")
+        count += 1
+        if count % 4 == 0:
+            print()  
+    print("-" * 73)
