@@ -1,4 +1,4 @@
-#Dictionary with all DNA codons mapped to full amino acid names.
+#Dictionary with DNA codons mapped to full amino acid names.
 codon_map = {
     # T-block (U-block in RNA)
     "TTT": "Phenylalanine", "TTC": "Phenylalanine", "TTA": "Leucine", "TTG": "Leucine",
@@ -39,7 +39,7 @@ def show_full_table():
 
 
 def check_valid_seq(seq):
-    # Check if sequence only has valid DNA letters
+    # Check if sequence only has valid DNA letters.
     allowed_bases = set("ATGC")
     for base in seq:
         if base not in allowed_bases:
@@ -50,10 +50,17 @@ def check_valid_seq(seq):
 def split_into_codons(seq):
     # Slice the sequence into groups of 3 nucleotides
     codon_list = []
+    leftover = ""
+    
     for i in range(0, len(seq), 3):
         chunk = seq[i:i+3]
-        codon_list.append(chunk)
-    return codon_list
+        if len(chunk) == 3:
+            codon_list.append(chunk)
+        else:
+            # Catch trailing bases if sequence length isn't a multiple of 3
+            leftover = chunk
+            
+    return codon_list, leftover
 
 
 # Main program execution
@@ -62,7 +69,7 @@ if __name__ == "__main__":
     if ask_table == 'y':
         show_full_table()
         
-    # Get sequence from user 
+    # Get sequence from user.
     user_seq = input("\nEnter a DNA sequence: ").strip().upper()
     
     if not user_seq:
@@ -70,5 +77,7 @@ if __name__ == "__main__":
     elif not check_valid_seq(user_seq):
         print("Invalid sequence! Please use only A, T, G, and C.")
     else:
-        codons = split_into_codons(user_seq)
+        codons, extra_bases = split_into_codons(user_seq)
         print("Split codons:", codons)
+        if extra_bases:
+            print(f"Incomplete codon ignored at end: {extra_bases}")
