@@ -1,4 +1,4 @@
-#Dictionary with DNA codons mapped to full amino acid names
+#Dictionary with DNA codons mapped to full amino acid names.
 codon_map = {
     # T-block (U-block in RNA)
     "TTT": "Phenylalanine", "TTC": "Phenylalanine", "TTA": "Leucine", "TTG": "Leucine",
@@ -36,3 +36,29 @@ def show_full_table():
         if count % 4 == 0:
             print()  
     print("-" * 73)
+
+
+def check_valid_seq(seq):
+    # Check if sequence only has valid DNA letters
+    allowed_bases = set("ATGC")
+    for base in seq:
+        if base not in allowed_bases:
+            return False
+    return True
+
+
+# Main program execution
+if __name__ == "__main__":
+    ask_table = input("Do you want to view the full 64-codon table first? (y/n): ").strip().lower()
+    if ask_table == 'y':
+        show_full_table()
+        
+    # Get sequence from user 
+    user_seq = input("\nEnter a DNA sequence: ").strip().upper()
+    
+    if not user_seq:
+        print("Empty input! Please enter a valid nucleotide sequence.")
+    elif not check_valid_seq(user_seq):
+        print("Invalid sequence! Please use only A, T, G, and C.")
+    else:
+        print("Valid DNA sequence received:", user_seq)
