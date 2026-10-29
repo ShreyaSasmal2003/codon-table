@@ -48,7 +48,7 @@ def check_valid_seq(seq):
 
 
 def split_into_codons(seq):
-    # Slice the sequence into groups of 3 nucleotides
+    # Slice the sequence into groups of 3 nucleotides.
     codon_list = []
     leftover = ""
     
@@ -57,13 +57,22 @@ def split_into_codons(seq):
         if len(chunk) == 3:
             codon_list.append(chunk)
         else:
-            # Catch trailing bases if sequence length isn't a multiple of 3
+            # Catch trailing bases if sequence length isn't a multiple of 3.
             leftover = chunk
             
     return codon_list, leftover
 
 
-# Main program execution
+def translate_sequence(codon_list):
+    # Translate each codon into its corresponding amino acid.
+    aa_chain = []
+    for c in codon_list:
+        amino_acid = codon_map.get(c, "Unknown")
+        aa_chain.append(amino_acid)
+    return aa_chain
+
+
+# Main program execution.
 if __name__ == "__main__":
     ask_table = input("Do you want to view the full 64-codon table first? (y/n): ").strip().lower()
     if ask_table == 'y':
@@ -78,6 +87,9 @@ if __name__ == "__main__":
         print("Invalid sequence! Please use only A, T, G, and C.")
     else:
         codons, extra_bases = split_into_codons(user_seq)
-        print("Split codons:", codons)
-        if extra_bases:
-            print(f"Incomplete codon ignored at end: {extra_bases}")
+        if not codons:
+            print(f"Sequence too short to form a 3-base codon (leftover: {extra_bases}).")
+        else:
+            translated_aa = translate_sequence(codons)
+            print("Codons:", codons)
+            print("Amino acids:", translated_aa)
