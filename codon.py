@@ -26,16 +26,6 @@ codon_map = {
 }
 
 
-def show_full_table():
-    # Helper function to print the codon lookup table.
-    print("\n--- Standard Genetic Code (64 Codons) ---")
-    count = 0
-    for codon, amino in codon_map.items():
-        print(f"{codon}: {amino:<15}", end=" | ")
-        count += 1
-        if count % 4 == 0:
-            print()  
-    print("-" * 73)
 
 
 def check_valid_seq(seq):
@@ -117,17 +107,15 @@ def print_results(codon_list, aa_chain, found_starts, found_stops, leftover):
 
 # Main program execution.
 if __name__ == "__main__":
-    ask_table = input("Do you want to view the full 64-codon table first? (y/n): ").strip().lower()
-    if ask_table == 'y':
-        show_full_table()
+   
         
     # Get sequence from user.
     user_seq = input("\nEnter a DNA or RNA sequence: ").strip().upper()
     
     if not user_seq:
-        print("Empty input! Please enter a valid nucleotide sequence.")
+        print("Please enter a valid nucleotide sequence.")
     elif not check_valid_seq(user_seq):
-        print("Invalid sequence! Please use only A, T, G, C (for DNA) or A, U, G, C (for RNA).")
+        print("Invalid sequence.")
     else:
         is_rna_seq = "U" in user_seq
         if is_rna_seq:
