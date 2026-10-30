@@ -1,4 +1,4 @@
-# Codon Table Generator & DNA/RNA Sequence Translator
+# Python - Codon Table Pipeline
 
 ## Project Overview
 In biology, genetic information is stored in DNA and RNA sequences made up of four chemical bases. During protein synthesis, cells read these sequences in groups of three bases called **codons**. Each 3-letter codon corresponds to a specific amino acid or a signal to start or stop building a protein.
