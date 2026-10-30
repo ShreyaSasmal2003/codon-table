@@ -25,9 +25,6 @@ codon_map = {
     "GGT": "Glycine", "GGC": "Glycine", "GGA": "Glycine", "GGG": "Glycine"
 }
 
-
-
-
 def check_valid_seq(seq):
     # Check if sequence only has valid DNA.
     allowed_bases = set("ATGCU")
@@ -39,10 +36,7 @@ def check_valid_seq(seq):
     if "T" in seq and "U" in seq:
         print("Error: Sequence mixes both T (DNA) and U (RNA) bases.")
         return False
-        
-    return True
-
-
+        return True
 def split_into_codons(seq):
     # Slice the sequence into groups of 3 nucleotides.
     codon_list = []
@@ -55,8 +49,7 @@ def split_into_codons(seq):
         else:
             # Catch trailing bases if sequence length isn't a multiple of 3.
             leftover = chunk
-            
-    return codon_list, leftover
+            return codon_list, leftover
 
 
 def translate_sequence(codon_list, is_rna=False):
@@ -82,7 +75,6 @@ def translate_sequence(codon_list, is_rna=False):
 
 
 def print_results(codon_list, aa_chain, found_starts, found_stops, leftover):
-    
     print("\n--- Translation Summary ---")
     print(f"Codons: {'-'.join(codon_list)}")
     print(f"Amino acids: {' - '.join(aa_chain)}")
@@ -91,9 +83,7 @@ def print_results(codon_list, aa_chain, found_starts, found_stops, leftover):
     
     if leftover:
         print(f"\nNote: Ignored incomplete codon at the end: '{leftover}'")
-        
-    
-    print("\n--- Detailed Breakdown Table ---")
+        print("\n--- Detailed Breakdown Table ---")
     print(f"{'Pos':<6} | {'Codon':<8} | {'Amino Acid':<18} | {'Role'}")
     print("-" * 50)
     for idx, (c, aa) in enumerate(zip(codon_list, aa_chain), start=1):
@@ -104,14 +94,11 @@ def print_results(codon_list, aa_chain, found_starts, found_stops, leftover):
             role = "Stop Codon"
         print(f"{idx:<6} | {c:<8} | {aa:<18} | {role}")
 
-
 # Main program execution.
 if __name__ == "__main__":
    
-        
-    # Get sequence from user.
+        # Get sequence from user.
     user_seq = input("\nEnter a DNA or RNA sequence: ").strip().upper()
-    
     if not user_seq:
         print("Please enter a valid nucleotide sequence.")
     elif not check_valid_seq(user_seq):
@@ -123,11 +110,13 @@ if __name__ == "__main__":
         else:
             print("Detected DNA sequence.")
             
-        # Process and display results.
+
+# Process and display results.
         codons, extra_bases = split_into_codons(user_seq)
-        
         if not codons:
             print(f"Sequence too short to form a 3-base codon (leftover: {extra_bases}).")
         else:
             translated_aa, starts, stops = translate_sequence(codons, is_rna=is_rna_seq)
             print_results(codons, translated_aa, starts, stops, extra_bases)
+
+            
