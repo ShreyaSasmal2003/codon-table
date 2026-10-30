@@ -1,6 +1,6 @@
 # Codon Table Generator & DNA/RNA Sequence Translator
 
-## 1.Project Overview
+## Project Overview
 In biology, genetic information is stored in DNA and RNA sequences made up of four chemical bases. During protein synthesis, cells read these sequences in groups of three bases called **codons**. Each 3-letter codon corresponds to a specific amino acid or a signal to start or stop building a protein.
 
 This project is a Python-based command-line program (`condon.py`) that builds the complete 64-codon standard genetic code dictionary from scratch. It takes any DNA or RNA sequence entered by the user, checks if it is valid, splits it into groups of three, and translates it into a readable chain of amino acids while highlighting start and stop signals.
